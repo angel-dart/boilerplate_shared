@@ -3,6 +3,142 @@
 part of 'foo.dart';
 
 // **************************************************************************
+// MigrationGenerator
+// **************************************************************************
+
+class FooMigration extends Migration {
+  @override
+  up(Schema schema) {
+    schema.create('foos', (table) {
+      table.serial('id')..primaryKey();
+      table.varChar('text');
+      table.integer('number');
+      table.timeStamp('created_at');
+      table.timeStamp('updated_at');
+    });
+  }
+
+  @override
+  down(Schema schema) {
+    schema.drop('foos');
+  }
+}
+
+// **************************************************************************
+// OrmGenerator
+// **************************************************************************
+
+class FooQuery extends Query<Foo, FooQueryWhere> {
+  FooQuery() {
+    _where = new FooQueryWhere(this);
+  }
+
+  @override
+  final FooQueryValues values = new FooQueryValues();
+
+  FooQueryWhere _where;
+
+  @override
+  get tableName {
+    return 'foos';
+  }
+
+  @override
+  get fields {
+    return const ['id', 'text', 'number', 'created_at', 'updated_at'];
+  }
+
+  @override
+  FooQueryWhere get where {
+    return _where;
+  }
+
+  @override
+  FooQueryWhere newWhereClause() {
+    return new FooQueryWhere(this);
+  }
+
+  static Foo parseRow(List row) {
+    if (row.every((x) => x == null)) return null;
+    var model = new Foo(
+        id: row[0].toString(),
+        text: (row[1] as String),
+        number: (row[2] as int),
+        createdAt: (row[3] as DateTime),
+        updatedAt: (row[4] as DateTime));
+    return model;
+  }
+
+  @override
+  deserialize(List row) {
+    return parseRow(row);
+  }
+}
+
+class FooQueryWhere extends QueryWhere {
+  FooQueryWhere(FooQuery query)
+      : id = new NumericSqlExpressionBuilder<int>(query, 'id'),
+        text = new StringSqlExpressionBuilder(query, 'text'),
+        number = new NumericSqlExpressionBuilder<int>(query, 'number'),
+        createdAt = new DateTimeSqlExpressionBuilder(query, 'created_at'),
+        updatedAt = new DateTimeSqlExpressionBuilder(query, 'updated_at');
+
+  final NumericSqlExpressionBuilder<int> id;
+
+  final StringSqlExpressionBuilder text;
+
+  final NumericSqlExpressionBuilder<int> number;
+
+  final DateTimeSqlExpressionBuilder createdAt;
+
+  final DateTimeSqlExpressionBuilder updatedAt;
+
+  @override
+  get expressionBuilders {
+    return [id, text, number, createdAt, updatedAt];
+  }
+}
+
+class FooQueryValues extends MapQueryValues {
+  @override
+  get casts {
+    return {};
+  }
+
+  int get id {
+    return (values['id'] as int);
+  }
+
+  set id(int value) => values['id'] = value;
+  String get text {
+    return (values['text'] as String);
+  }
+
+  set text(String value) => values['text'] = value;
+  int get number {
+    return (values['number'] as int);
+  }
+
+  set number(int value) => values['number'] = value;
+  DateTime get createdAt {
+    return (values['created_at'] as DateTime);
+  }
+
+  set createdAt(DateTime value) => values['created_at'] = value;
+  DateTime get updatedAt {
+    return (values['updated_at'] as DateTime);
+  }
+
+  set updatedAt(DateTime value) => values['updated_at'] = value;
+  void copyFrom(Foo model) {
+    text = model.text;
+    number = model.number;
+    createdAt = model.createdAt;
+    updatedAt = model.updatedAt;
+  }
+}
+
+// **************************************************************************
 // JsonModelGenerator
 // **************************************************************************
 

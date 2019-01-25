@@ -3,7 +3,10 @@ publish_to: none
 environment:
   sdk: '>=2.0.0-dev <3.0.0'
 dependencies:
+  angel_migration: ^2.0.0-alpha
+  angel_orm: ^2.0.0-dev
   angel_serialize: ^2.0.0
 dev_dependencies:
+  angel_orm_generator: ^2.0.0-dev
   angel_serialize_generator: ^2.0.0
   build_runner: ^1.0.0
